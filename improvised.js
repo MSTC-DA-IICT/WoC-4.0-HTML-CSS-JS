@@ -23,7 +23,7 @@ const trash = document.getElementsByClassName('fa-trash');
 const lis = document.getElementsByClassName('lis');
 const delList = document.getElementsByClassName('deleteList');
 const tasks = document.getElementsByTagName('span');
-const cardsR = document.getElementsByClassName('cardH');
+const cardsR = document.getElementsByClassName('card');
 
 
 // EVENT LISTENERS
