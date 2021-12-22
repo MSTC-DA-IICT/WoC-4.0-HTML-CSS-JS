@@ -1,8 +1,18 @@
 // STORAGE
-const storage = {
+// run bolow code for demonstrate localStorage:
+
+const storage01 = {
     "entertainment": ["netflix", "amazon prime", "telegram", "youtube"],
     "studies": ["CT", "EL", "IT", "SC"]
 }
+
+// localStorage.setItem("entertainment",JSON.stringify(storage01.entertainment));
+// localStorage.setItem("studies",JSON.stringify(storage01.studies));
+
+//End
+
+
+
 
 // DECLARATIONS
 const cards = document.querySelector('.cards');
@@ -13,6 +23,7 @@ const trash = document.getElementsByClassName('fa-trash');
 const lis = document.getElementsByClassName('lis');
 const delList = document.getElementsByClassName('deleteList');
 const tasks = document.getElementsByTagName('span');
+const cardsR = document.getElementsByClassName('cardH');
 
 
 // EVENT LISTENERS
@@ -21,7 +32,23 @@ newList.addEventListener('click', addNewList);
 
 // FUNCTIONS
 
-// 1. Populate the DOM using the storage - HARSH
+// 1. Populate the DOM using the storage - HARSH (Done)
+window.onload = (e) => {
+    for (let i = 0; i < localStorage.length; i++) {
+        var listItm = '';
+        const key = localStorage.key(i);
+        const listTask = JSON.parse(localStorage.getItem(key));
+        cardsR[i].children[1].previousElementSibling.children[0].innerText = key;
+
+        for(let j= 0;j<listTask.length;j++)
+        {
+            listItm +=  `<li class="lis"><span>${listTask[j]}<i class="fas fa-trash"></i></span></li>`
+        } 
+        // console.log(listItm);
+        cardsR[i].children[1].children[0].innerHTML = listItm;
+    }
+};
+//Done Task 01
 
 // 2. Add new list - JINAL
 /* `<div class="card">
@@ -57,19 +84,12 @@ newList.addEventListener('click', addNewList);
 function doit(e) {
     if (e.target.className === 'newTask') {
         const usertask = prompt("enter the task");
-        const li = document.createElement('li');
-        const span = document.createElement('span');
-        // const iconedit = document.createElement('i');
-        const icontrash = document.createElement('i');
-
-        // iconedit.classList.add('fas', 'fa-edit');
-        icontrash.classList.add('fas', 'fa-trash');
-
-        span.innerText = usertask;
-        li.appendChild(span);
-        // span.appendChild(iconedit);
-        span.appendChild(icontrash);
-        e.target.parentElement.children[0].appendChild(li);
+        const rootpath = e.target.parentElement.previousElementSibling.children[0].innerText;
+        var dataTask = JSON.parse(localStorage.getItem(rootpath));
+        dataTask.push(usertask);
+        console.log(dataTask);
+        var task = localStorage.setItem(rootpath,JSON.stringify(dataTask));
+        location.reload();
         e.stopPropagation();
     }
     else if (e.target.classList[1] === 'fa-trash') {
