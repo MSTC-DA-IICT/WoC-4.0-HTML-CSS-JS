@@ -43,7 +43,8 @@ window.onload = (e) => {
 };
 //Done Task 01
 // 2. Add new list - JINAL
-function addNewList() {
+function addNewList()
+{
     const userTitle = prompt('Enter the title of your new list');
 
     let HTMLstr = ` <div class="card">
@@ -130,29 +131,4 @@ function doit(e) {
     }
     else if (e.target.localName === 'span')
         e.target.classList.toggle('done');
-}
-function addNewList() {
-    const userTitle = prompt('Enter the title of your new list');
-    const card = document.createElement('div');
-    card.classList.add('card');
-    const cardTitle = document.createElement('div');
-    cardTitle.classList.add('cardTitle');
-    const cardTitleh2 = document.createElement('h2');
-    cardTitleh2.innerText = userTitle;
-    const tasksdiv = document.createElement('div');
-    tasksdiv.classList.add('tasks');
-    const tasksul = document.createElement('ul');
-    const createTaskBtn = document.createElement('button');
-    const deleteListBtn = document.createElement('button');
-    createTaskBtn.classList.add('newTask');
-    createTaskBtn.innerText = 'Add Task';
-    deleteListBtn.classList.add('deleteList');
-    deleteListBtn.innerText = 'Delete List';
-    cards.appendChild(card);
-    card.appendChild(cardTitle);
-    card.appendChild(tasksdiv);
-    cardTitle.appendChild(cardTitleh2);
-    tasksdiv.appendChild(tasksul);
-    tasksdiv.appendChild(createTaskBtn);
-    tasksdiv.appendChild(deleteListBtn);
 }
