@@ -64,4 +64,5 @@ function addNewList()
 
     const div = document.getElementById('cards');
     div.innerHTML += HTMLstr;
+    localStorage.setItem(userTitle,null);
 }
