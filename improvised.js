@@ -1,17 +1,8 @@
-
-
-
-///New one
-// STORAGE
-// run bolow code for demonstrate localStorage:
 const storage01 = {
-    "entertainment": ["netflix", "amazon prime", "telegram", "youtube"],
-    "studies": ["CT", "EL", "IT", "SC"]
+    "entertainment": [{ text: "netflix", done: false }],
+    "studies": [{ text: "CT", done: true }]
 }
-// localStorage.setItem("entertainment",JSON.stringify(storage01.entertainment));
-// localStorage.setItem("studies",JSON.stringify(storage01.studies));
-//End
-// DECLARATIONS
+
 const cards = document.querySelector('.cards');
 const newList = document.querySelector('.fa-plus');
 const newTask = document.getElementsByClassName('newTask');
@@ -21,27 +12,51 @@ const lis = document.getElementsByClassName('lis');
 const delList = document.getElementsByClassName('deleteList');
 const tasks = document.getElementsByTagName('span');
 const cardsR = document.getElementsByClassName('card');
+
+
 // EVENT LISTENERS
 cards.addEventListener('click', doit);
 newList.addEventListener('click', addNewList);
+
+
 // FUNCTIONS
 // 1. Populate the DOM using the storage - HARSH (Done)
 window.onload = (e) => {
-    for (let i = 0; i < localStorage.length; i++) {
-        var listItm = '';
-        const key = localStorage.key(i);
-        const listTask = JSON.parse(localStorage.getItem(key));
-        cardsR[i].children[1].previousElementSibling.children[0].innerText = key;
+    let data = JSON.parse(localStorage.getItem("storage"));
 
-        for (let j = 0; j < listTask.length; j++) {
-            listItm += `<li class="lis"><span>${listTask[j]}<i class="fas fa-trash"></i></span></li>`
-            listItm += `<li class="lis"><span>${listTask[j]}<i class="fas fa-trash"></i></span><span> <i class="fas fa-edit"></i></span></li>`
-        }
-        // console.log(listItm);
-        cardsR[i].children[1].children[0].innerHTML = listItm;
+    let htmlStr = '';
+
+    for (key in data) {
+
+        let str = `<div class="card">
+                <div class="cardTitle">
+                    <h2>${key}</h2>
+                </div>
+                <div class="tasks">
+                    <ul>`;
+
+        let arr = data[key];
+        arr.forEach(item => {
+            str += `<li class="lis">
+                            <span data-key=${key} class=${item.done && 'done'}>${item.text}
+                                <i class="fas fa-edit" data-key=${key}></i>
+                                <i class="fas fa-trash" data-key=${key}></i>
+                            </span>
+                        </li>`
+        })
+
+        str += `</ul>
+                    <button class="newTask" data-key=${key}>Add Task</button>
+                    <button class="deleteList" data-key=${key}>Delete List</button>
+                </div>
+            </div>`;
+
+        htmlStr += str;
     }
+
+    cards.innerHTML += htmlStr;
 };
-//Done Task 01
+
 // 2. Add new list - JINAL
 function addNewList() {
     const userTitle = prompt('Enter the title of your new list');
@@ -54,63 +69,61 @@ function addNewList() {
                         <ul>
                             
                         </ul>
-                        <button class="newTask">Add Task</button>
-                        <button class="deleteList">Delete List</button>
+                        <button class="newTask" data-key=${userTitle}>Add Task</button>
+                        <button class="deleteList" data-key=${userTitle}>Delete List</button>
                     </div>`
 
-    const div = document.getElementById('cards');
-    div.innerHTML += HTMLstr;
-    localStorage.setItem(userTitle, null);
+    cards.innerHTML += HTMLstr;
+
+    let data = JSON.parse(localStorage.getItem("storage")) || {};
+
+    data[userTitle] = [];
+
+    localStorage.setItem("storage", JSON.stringify(data));
 }
-// 3. Add new task to a list - KAUSHAL
-/* `<li class="lis">
-        <span>
-            <i class="fas fa-trash"></i>
-        </span>
-    </li>` */
-// 4. Delete a task from the list - ARPAN
-// 5. Delete a list - ISHA
-for (const item of delList) {
-    item.addEventListener('click', () => {
-        item.parentElement.parentElement.remove();
-        localStorage.removeItem(item.parentElement.parentElement);
-    })
-}
+
+
 // 6. Strike through a task(mark as done) - KAVYA
 // 7. Update a task - DHAIRYA
-
-// function fetchandPush()
-
 
 
 // 
 function doit(e) {
+    // 3. Add new task to a list - KAUSHAL
     if (e.target.className === 'newTask') {
-        const usertask = prompt("enter the task");
-        const rootpath = e.target.parentElement.previousElementSibling.children[0].innerText;
-        var dataTask = JSON.parse(localStorage.getItem(rootpath));
-        dataTask.push(usertask);
-        console.log(dataTask);
-        var task = localStorage.setItem(rootpath, JSON.stringify(dataTask));
-        if (dataTask === null) {
-            // console.log(JSON.stringify([usertask]));
-            localStorage.setItem(rootpath, JSON.stringify([usertask]));
-        }
-        else {
-            dataTask.push(usertask);
-            console.log(dataTask);
-            var task = localStorage.setItem(rootpath, JSON.stringify(dataTask));
-        }
 
-        location.reload();
-        e.stopPropagation();
+        const usertask = prompt("enter the task");
+        const list = e.target.dataset.key;
+
+        // adding the li to the list
+        const htmlStr = `<li class="lis">
+                            <span data-key=${list}>${usertask}
+                                <i class="fas fa-edit"data-key=${list}></i>
+                                <i class="fas fa-trash"data-key=${list}></i>
+                            </span>
+                        </li>`;
+
+        e.target.previousElementSibling.innerHTML += htmlStr;
+
+
+        // setting the task to localstorage
+        var data = JSON.parse(localStorage.getItem('storage'));
+
+        let arr = data[list];
+
+        arr = [...arr, { text: usertask, done: false }];
+
+        data[list] = arr;
+
+        localStorage.setItem('storage', JSON.stringify(data));
+
     }
     else if (e.target.classList[1] === 'fa-edit') {
 
         let a = e.target.parentElement.parentElement.innerText;
         console.log(a);
         const usertask = prompt("enter the task", a);
-        var rootpath = e.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling.children[0].innerText;;
+        var rootpath = e.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling.children[0].innerText;
         var dataTask = JSON.parse(localStorage.getItem(rootpath));
         for (let j = 0; j < dataTask.length; j++) {
             if (dataTask[j] == a) {
@@ -122,37 +135,42 @@ function doit(e) {
         location.reload();
 
     }
+
+    // 4. Delete a task from the list - ARPAN
     else if (e.target.classList[1] === 'fa-trash') {
+        // changing the DOM - removing the li from the list
         e.target.parentElement.remove();
+
+        // updating the localStorage
+        let list = e.target.dataset.key;
+        let text = e.target.parentElement.innerText;
+
+        let data = JSON.parse(localStorage.getItem('storage'));
+
+        let arr = data[list];
+
+        newArr = arr.filter(item => item.text != text.trim());
+
+        data[list] = newArr;
+
+        localStorage.setItem('storage', JSON.stringify(data));
     }
+
+    // 5. Delete a list - ISHA
     else if (e.target.classList[0] === 'deleteList') {
+        // deleting list from the DOM
         e.target.parentElement.parentElement.remove();
+
+        // updating the localStorage
+        let list = e.target.dataset.key;
+
+        let data = JSON.parse(localStorage.getItem("storage"));
+
+        delete data[list];
+
+        localStorage.setItem("storage", JSON.stringify(data));
     }
+
     else if (e.target.localName === 'span')
         e.target.classList.toggle('done');
-}
-function addNewList() {
-    const userTitle = prompt('Enter the title of your new list');
-    const card = document.createElement('div');
-    card.classList.add('card');
-    const cardTitle = document.createElement('div');
-    cardTitle.classList.add('cardTitle');
-    const cardTitleh2 = document.createElement('h2');
-    cardTitleh2.innerText = userTitle;
-    const tasksdiv = document.createElement('div');
-    tasksdiv.classList.add('tasks');
-    const tasksul = document.createElement('ul');
-    const createTaskBtn = document.createElement('button');
-    const deleteListBtn = document.createElement('button');
-    createTaskBtn.classList.add('newTask');
-    createTaskBtn.innerText = 'Add Task';
-    deleteListBtn.classList.add('deleteList');
-    deleteListBtn.innerText = 'Delete List';
-    cards.appendChild(card);
-    card.appendChild(cardTitle);
-    card.appendChild(tasksdiv);
-    cardTitle.appendChild(cardTitleh2);
-    tasksdiv.appendChild(tasksul);
-    tasksdiv.appendChild(createTaskBtn);
-    tasksdiv.appendChild(deleteListBtn);
 }
