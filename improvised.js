@@ -42,7 +42,7 @@ window.onload = (e) => {
 
         for(let j= 0;j<listTask.length;j++)
         {
-            listItm +=  `<li class="lis"><span>${listTask[j]}<i class="fas fa-trash"></i></span></li>`
+            listItm +=  `<li class="lis"><span>${listTask[j]}<i class="fas fa-trash"></i></span><span> <i class="fas fa-edit"></i></span></li>`
         } 
         // console.log(listItm);
         cardsR[i].children[1].children[0].innerHTML = listItm;
@@ -76,6 +76,7 @@ window.onload = (e) => {
 // 6. Strike through a task(mark as done) - KAVYA
 // 7. Update a task - DHAIRYA
 
+// function fetchandPush()
 
 
 
@@ -86,11 +87,38 @@ function doit(e) {
         const usertask = prompt("enter the task");
         const rootpath = e.target.parentElement.previousElementSibling.children[0].innerText;
         var dataTask = JSON.parse(localStorage.getItem(rootpath));
-        dataTask.push(usertask);
-        console.log(dataTask);
-        var task = localStorage.setItem(rootpath,JSON.stringify(dataTask));
+        if(dataTask === null)
+        {
+            // console.log(JSON.stringify([usertask]));
+            localStorage.setItem(rootpath,JSON.stringify([usertask]));
+        }
+        else{
+            dataTask.push(usertask);
+            console.log(dataTask);
+            var task = localStorage.setItem(rootpath,JSON.stringify(dataTask));
+        }
+        
         location.reload();
         e.stopPropagation();
+    }
+    else if(e.target.classList[1] === 'fa-edit'){
+
+        let a=e.target.parentElement.parentElement.innerText;
+        console.log(a);
+        const usertask = prompt("enter the task",a);
+        var rootpath = e.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling.children[0].innerText;;
+        var dataTask = JSON.parse(localStorage.getItem(rootpath));
+        for(let j= 0;j<dataTask.length;j++)
+        {
+            if(dataTask[j] == a)
+            {
+                dataTask[j] = usertask;
+                break;
+            }
+        } 
+        var task = localStorage.setItem(rootpath,JSON.stringify(dataTask));
+        location.reload();
+        
     }
     else if (e.target.classList[1] === 'fa-trash') {
         e.target.parentElement.remove();
