@@ -21,8 +21,7 @@
     <script>
         if (!localStorage.getItem('storage')) {
             let baseStorage = {
-                "entertainment": [{ text: "netflix", done: false }],
-                "studies": [{ text: "CT", done: true }]
+                "Task List": [{ text: "Task 1", done: false }, { text: "Task 2", done: false }],
             }
             localStorage.setItem('storage', JSON.stringify(baseStorage));
         }

@@ -180,6 +180,20 @@ function doit(e) {
         localStorage.setItem("storage", JSON.stringify(data));
     }
 
-    else if (e.target.localName === 'span')
+    else if (e.target.localName === 'span') {
         e.target.classList.toggle('done');
+        let text = e.target.innerText.trim();
+
+        // updating local storage
+        let list = e.target.dataset.key;
+        var data = JSON.parse(localStorage.getItem('storage'));
+        let arr = data[list];
+        for (let j = 0; j < arr.length; j++) {
+            if (arr[j].text === text) {
+                arr[j].done = !arr[j].done;
+                break;
+            }
+        }
+        localStorage.setItem('storage', JSON.stringify(data));
+    }
 }
