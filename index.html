@@ -18,6 +18,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="style.css" />
+    <script>
+        if (!localStorage.getItem('storage')) {
+            let baseStorage = {
+                "entertainment": [{ text: "netflix", done: false }],
+                "studies": [{ text: "CT", done: true }]
+            }
+            localStorage.setItem('storage', JSON.stringify(baseStorage));
+        }
+    </script>
 </head>
 
 <body>
@@ -29,7 +38,7 @@
 
     <section>
         <div class="cards" id="cards">
-            <div class="card">
+            <!-- <div class="card">
                 <div class="cardTitle">
                     <h2>Entertainment</h2>
                 </div>
@@ -57,9 +66,9 @@
                     <button class="newTask">Add Task</button>
                     <button class="deleteList">Delete List</button>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="card">
+            <!-- <div class="card">
                 <div class="cardTitle">
                     <h2>Studies</h2>
                 </div>
@@ -85,9 +94,7 @@
                     <button class="newTask" data-key="Studies">Add Task</button>
                     <button class="deleteList" data-key="Studies">Delete List</button>
                 </div>
-            </div>
-
-
+            </div> -->
         </div>
 
         <i class="fas fa-plus"></i>

@@ -1,7 +1,4 @@
-const storage01 = {
-    "entertainment": [{ text: "netflix", done: false }],
-    "studies": [{ text: "CT", done: true }]
-}
+
 
 const cards = document.querySelector('.cards');
 const newList = document.querySelector('.fa-plus');
@@ -22,6 +19,7 @@ newList.addEventListener('click', addNewList);
 // FUNCTIONS
 // 1. Populate the DOM using the storage - HARSH (Done)
 window.onload = (e) => {
+
     let data = JSON.parse(localStorage.getItem("storage"));
 
     let htmlStr = '';
