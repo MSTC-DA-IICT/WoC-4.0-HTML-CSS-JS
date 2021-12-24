@@ -120,20 +120,31 @@ function doit(e) {
     }
     else if (e.target.classList[1] === 'fa-edit') {
 
-        let a = e.target.parentElement.parentElement.innerText;
-        console.log(a);
-        const usertask = prompt("enter the task", a);
-        var rootpath = e.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling.children[0].innerText;
-        var dataTask = JSON.parse(localStorage.getItem(rootpath));
-        for (let j = 0; j < dataTask.length; j++) {
-            if (dataTask[j] == a) {
-                dataTask[j] = usertask;
+        let task = e.target.parentElement;
+        let list = e.target.dataset.key;
+
+        let prevTask = e.target.parentElement.innerText.trim();
+        let newTask = prompt("enter the task", prevTask);
+        task.innerHTML = `${newTask}
+                        <i class="fas fa-edit" data-key=${list}></i>
+                        <i class="fas fa-trash" data-key=${list}></i>`
+
+        //local
+
+        let data = JSON.parse(localStorage.getItem('storage'));
+
+        let listData = data[list];
+
+        for (let j = 0; j < listData.length; j++) {
+            if (listData[j].text == prevTask) {
+                listData[j].text = newTask;
                 break;
             }
         }
-        var task = localStorage.setItem(rootpath, JSON.stringify(dataTask));
-        location.reload();
 
+        data[list] = listData;
+
+        localStorage.setItem('storage', JSON.stringify(data));
     }
 
     // 4. Delete a task from the list - ARPAN
